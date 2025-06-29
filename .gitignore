@@ -1,82 +1,62 @@
-#!/usr/bin/env python3
-import os
-import argparse
-import fnmatch
+# Byte-compiled / cache files
+__pycache__/
+*.py[cod]
+*.so
 
-# --- Utilities to parse .gitignore ---
-def load_gitignore(path='.gitignore'):
-    ignores = []
-    if os.path.exists(path):
-        with open(path, 'r') as f:
-            for line in f:
-                line = line.strip()
-                if line and not line.startswith('#'):
-                    ignores.append(line)
-    return ignores
+# OS files
+.DS_Store
+Thumbs.db
 
-def is_ignored(filepath, patterns):
-    for pat in patterns:
-        if fnmatch.fnmatch(filepath, pat) or fnmatch.fnmatch(os.path.basename(filepath), pat):
-            return True
-    return False
+# Python environments
+.env
+.venv
+env/
+venv/
+ENV/
 
-# --- Script main ---
-def main():
-    parser = argparse.ArgumentParser(description="Omega Framework version/DOI updater")
-    parser.add_argument('--old-version', required=True)
-    parser.add_argument('--new-version', required=True)
-    parser.add_argument('--old-doi', required=True)
-    parser.add_argument('--new-doi', required=True)
-    args = parser.parse_args()
+# Jupyter/IPython
+.ipynb_checkpoints
+*.ipynb
 
-    exts = ['.md', '.tex', '.json', '.yml', '.yaml', '.rst', '.bib']
-    gitignore = load_gitignore()
-    updated = []
+# LaTeX output
+*.aux
+*.log
+*.out
+*.toc
+*.bbl
+*.blg
+*.lof
+*.lot
+*.fls
+*.fdb_latexmk
+*.synctex.gz
+*.pdf
+*.dvi
 
-    for root, dirs, files in os.walk('.'):
-        for fname in files:
-            fpath = os.path.join(root, fname)
-            relpath = os.path.relpath(fpath, '.')
-            if not any(fname.endswith(ext) for ext in exts):
-                continue
-            if is_ignored(relpath, gitignore):
-                continue
-            # Read and update file if needed
-            with open(fpath, 'r', encoding='utf-8', errors='ignore') as f:
-                content = f.read()
-            new_content = content.replace(args.old_version, args.new_version).replace(args.old_doi, args.new_doi)
-            if new_content != content:
-                with open(fpath, 'w', encoding='utf-8') as f:
-                    f.write(new_content)
-                updated.append(relpath)
-    # Print update log
-    if updated:
-        print("✅ Updated version/DOI in:")
-        for u in updated:
-            print("  -", u)
-    else:
-        print("No files updated. Check if version/DOI appears in supported file types.")
+# Build/output directories
+build/
+dist/
+*.egg-info/
+output/
+results/
+figures/
+data/
+archive/
+tmp/
+temp/
 
-if __name__ == '__main__':
-    main()### AL ###
-#Template for AL projects for Dynamics 365 Business Central
-#launch.json folder
+# Misc
+*.bak
+*.tmp
+*~
+# Ignore large package and release files
+*.zip
+*.tar.gz
+
+# VSCode and PyCharm
 .vscode/
-#Cache folder
-.alcache/
-#Symbols folder
-.alpackages/
-#Snapshots folder
-.snapshots/
-#Testing Output folder
-.output/
-#Extension App-file
-*.app
-#Rapid Application Development File
-rad.json
-#Translation Base-file
-*.g.xlf
-#License-file
-*.flf
-#Test results file
-TestResults.xml
+.idea/
+
+# Secrets (if any)
+*.env
+.secret
