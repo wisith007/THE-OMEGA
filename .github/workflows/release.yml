@@ -1,0 +1,28 @@
+name: Omega Release Build
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  build-release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Create package (ZIP)
+        run: |
+          zip -r Omega_Framework_${{ github.ref_name }}.zip . -x '*.git*' '*.DS_Store'
+
+      - name: Upload Release Asset
+        uses: softprops/action-gh-release@v2
+        with:
+          files: Omega_Framework_${{ github.ref_name }}.zip
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Print Zenodo Guide
+        run: |
+          echo "If your repo is linked to Zenodo, this GitHub release will auto-sync."
+          echo "After Zenodo assigns a DOI, update your documentation with the new DOI."
