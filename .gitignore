@@ -2,6 +2,9 @@
 __pycache__/
 *.py[cod]
 *.so
+git add .gitignore
+git commit -m "Add project-specific .gitignore for Omega Framework"
+git push
 
 # OS files
 .DS_Store
